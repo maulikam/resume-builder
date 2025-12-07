@@ -1,10 +1,6 @@
 package com.resumebuilder.backend.service;
 
-import java.util.Arrays;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Locale;
-import java.util.Set;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,18 +18,21 @@ public class DefaultJobDescriptionService implements JobDescriptionService {
 
     private final JobDescriptionRepository jobDescriptionRepository;
     private final JobDescriptionMapper jobDescriptionMapper;
+    private final KeywordExtractor keywordExtractor;
 
     public DefaultJobDescriptionService(JobDescriptionRepository jobDescriptionRepository,
-            JobDescriptionMapper jobDescriptionMapper) {
+            JobDescriptionMapper jobDescriptionMapper,
+            KeywordExtractor keywordExtractor) {
         this.jobDescriptionRepository = jobDescriptionRepository;
         this.jobDescriptionMapper = jobDescriptionMapper;
+        this.keywordExtractor = keywordExtractor;
     }
 
     @Override
     @Transactional
     public JobDescriptionResponse create(JobDescriptionRequest request) {
         JobDescription entity = jobDescriptionMapper.toEntity(request);
-        entity.setExtractedKeywords(extractKeywords(request.getContent()));
+        entity.setExtractedKeywords(keywordExtractor.extract(request.getContent()));
         JobDescription saved = jobDescriptionRepository.save(entity);
         return jobDescriptionMapper.toResponse(saved);
     }
@@ -56,18 +55,5 @@ public class DefaultJobDescriptionService implements JobDescriptionService {
     private JobDescription find(Long id) {
         return jobDescriptionRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Job description not found: " + id));
-    }
-
-    private Set<String> extractKeywords(String content) {
-        if (content == null || content.isBlank()) {
-            return Set.of();
-        }
-        String normalized = content.toLowerCase(Locale.ROOT)
-                .replaceAll("[^a-z0-9 ]", " ");
-        return new LinkedHashSet<>(
-                Arrays.stream(normalized.split("\\s+"))
-                        .filter(token -> token.length() > 2)
-                        .limit(50)
-                        .toList());
     }
 }

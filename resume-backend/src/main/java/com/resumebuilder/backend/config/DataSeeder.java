@@ -20,7 +20,41 @@ public class DataSeeder {
                 ResumeTemplate template = new ResumeTemplate();
                 template.setName("Default");
                 template.setDescription("Minimal LaTeX resume template placeholder");
-                template.setLatexContent("% LaTeX template placeholder");
+                template.setLatexContent("""
+                        \\documentclass{article}
+                        \\usepackage[margin=1in]{geometry}
+                        \\begin{document}
+                        \\begin{center}
+                        {\\LARGE {{fullName}}}\\\\
+                        {{email}} \\quad {{phone}}\\\\
+                        {{location}}
+                        \\end{center}
+                        \\vspace{0.5cm}
+                        \\textbf{Summary}\\\\
+                        {{summary}}
+                        \\vspace{0.5cm}
+                        \\textbf{Job Target}\\\\
+                        {{jobTitle}} at {{jobCompany}}\\\\
+                        \\vspace{0.5cm}
+                        \\textbf{Job Description}\\\\
+                        {{jobContent}}
+                        \\vspace{0.5cm}
+                        \\textbf{Experience}
+                        \\begin{itemize}
+                        {{experiences}}
+                        \\end{itemize}
+                        \\vspace{0.5cm}
+                        \\textbf{Skills}
+                        \\begin{itemize}
+                        {{skills}}
+                        \\end{itemize}
+                        \\vspace{0.5cm}
+                        \\textbf{Education}
+                        \\begin{itemize}
+                        {{education}}
+                        \\end{itemize}
+                        \\end{document}
+                        """);
                 template.setDefaultTemplate(true);
                 repository.save(template);
             }

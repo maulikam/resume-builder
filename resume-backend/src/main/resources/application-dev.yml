@@ -22,3 +22,19 @@ spring:
 logging:
   level:
     org.hibernate.SQL: warn
+
+app:
+  latex:
+    output-dir: ${APP_LATEX_OUTPUT_DIR:./build/latex}
+  ai:
+    keyword-extraction: basic
+  security:
+    enabled: false
+    username: resume
+    password: changeme
+    roles: [USER]
+    token:
+    jwt:
+      enabled: false
+      secret: ${APP_SECURITY_JWT_SECRET:change-me}
+      expiration-seconds: 3600

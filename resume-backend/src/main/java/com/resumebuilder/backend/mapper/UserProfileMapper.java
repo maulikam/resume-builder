@@ -26,14 +26,17 @@ public interface UserProfileMapper {
 
     ProfileResponse toResponse(UserProfile entity);
 
+    @Mapping(target = "profile", ignore = true)
     Experience toEntity(ExperienceDto dto);
 
     ExperienceDto toDto(Experience entity);
 
+    @Mapping(target = "profile", ignore = true)
     Skill toEntity(SkillDto dto);
 
     SkillDto toDto(Skill entity);
 
+    @Mapping(target = "profile", ignore = true)
     Education toEntity(EducationDto dto);
 
     EducationDto toDto(Education entity);

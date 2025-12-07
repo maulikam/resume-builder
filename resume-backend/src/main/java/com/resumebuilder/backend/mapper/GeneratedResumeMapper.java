@@ -10,5 +10,6 @@ import com.resumebuilder.backend.web.dto.ResumeGenerationResponse;
 public interface GeneratedResumeMapper {
 
     @Mapping(target = "generatedResumeId", source = "id")
+    @Mapping(target = "message", ignore = true)
     ResumeGenerationResponse toResponse(GeneratedResume entity);
 }

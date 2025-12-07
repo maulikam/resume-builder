@@ -6,4 +6,6 @@ import com.resumebuilder.backend.web.dto.ResumeGenerationResponse;
 public interface ResumeGenerationService {
 
     ResumeGenerationResponse generate(ResumeGenerationRequest request);
+
+    byte[] download(Long generatedResumeId);
 }

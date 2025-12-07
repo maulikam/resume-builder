@@ -17,3 +17,14 @@ spring:
 logging:
   level:
     org.springframework: warn
+
+app:
+  latex:
+    output-dir: ${APP_LATEX_OUTPUT_DIR:./build/latex}
+  ai:
+    keyword-extraction: basic
+  security:
+    enabled: false
+    username: resume
+    password: changeme
+    roles: [USER]
