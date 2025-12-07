@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/resume}
+    username: ${SPRING_DATASOURCE_USERNAME:resume}
+    password: ${SPRING_DATASOURCE_PASSWORD:resume}
+    driverClassName: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+    open-in-view: false
+  ai:
+    openai:
+      api-key: ${SPRING_AI_OPENAI_API_KEY:}
+
+logging:
+  level:
+    org.hibernate.SQL: info

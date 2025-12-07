@@ -1,0 +1,6 @@
+spring:
+  ai:
+    openai:
+      api-key: test-key
+  main:
+    allow-bean-definition-overriding: true
