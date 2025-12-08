@@ -8,4 +8,5 @@ import com.resumebuilder.backend.domain.ResumeTemplate;
 
 public interface ResumeTemplateRepository extends JpaRepository<ResumeTemplate, Long> {
     Optional<ResumeTemplate> findFirstByDefaultTemplateTrue();
+    Optional<ResumeTemplate> findByName(String name);
 }

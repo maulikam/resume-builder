@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
+import dev.langchain4j.model.chat.ChatLanguageModel;
+
 @Component
 @ConditionalOnProperty(name = "app.ai.keyword-extraction", havingValue = "ai")
 public class AiKeywordExtractor implements KeywordExtractor {
@@ -22,8 +24,24 @@ public class AiKeywordExtractor implements KeywordExtractor {
     @Autowired(required = false)
     private ChatModel chatModel;
 
+    @Autowired(required = false)
+    private ChatLanguageModel langchainModel;
+
     @Override
     public Set<String> extract(String content) {
+        if (langchainModel != null) {
+            try {
+                String response = langchainModel.generate("""
+                        Extract up to 15 important keywords from the following job description.
+                        Return a comma-separated list of keywords only.
+                        Job Description:
+                        %s
+                        """.formatted(content));
+                return parse(response);
+            } catch (Exception e) {
+                log.warn("LangChain keyword extraction failed: {}", e.getMessage());
+            }
+        }
         if (chatModel == null) {
             log.warn("AI keyword extraction enabled, but ChatModel not available; returning empty set");
             return new LinkedHashSet<>();
@@ -36,6 +54,10 @@ public class AiKeywordExtractor implements KeywordExtractor {
                 """;
         Prompt prompt = new PromptTemplate(template).create(Map.of("jd", content));
         String response = chatModel.call(prompt).getResult().getOutput().getText();
+        return parse(response);
+    }
+
+    private Set<String> parse(String response) {
         LinkedHashSet<String> keywords = new LinkedHashSet<>();
         if (response != null) {
             for (String token : response.split(",")) {

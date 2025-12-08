@@ -1,9 +1,10 @@
 package com.resumebuilder.backend.web;
 
-import java.util.List;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,8 +36,10 @@ public class JobDescriptionController {
     }
 
     @GetMapping
-    public ResponseEntity<List<JobDescriptionResponse>> list() {
-        return ResponseEntity.ok(jobDescriptionService.list());
+    public ResponseEntity<Page<JobDescriptionResponse>> list(
+            @RequestParam(value = "q", required = false) String search,
+            Pageable pageable) {
+        return ResponseEntity.ok(jobDescriptionService.list(search, pageable));
     }
 
     @GetMapping("/{id}")

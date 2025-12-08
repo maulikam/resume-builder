@@ -26,6 +26,7 @@ public class JwtService {
         return Jwts.builder()
                 .subject(subject)
                 .claim("roles", roles)
+                .issuer(config.getIssuer())
                 .issuedAt(now)
                 .expiration(exp)
                 .signWith(Keys.hmacShaKeyFor(config.getSecret().getBytes()))
@@ -34,6 +35,7 @@ public class JwtService {
 
     public Claims parse(String token) {
         return Jwts.parser()
+                .requireIssuer(config.getIssuer())
                 .verifyWith(Keys.hmacShaKeyFor(config.getSecret().getBytes()))
                 .build()
                 .parseSignedClaims(token)

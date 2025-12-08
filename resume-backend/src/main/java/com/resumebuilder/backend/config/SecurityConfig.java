@@ -10,7 +10,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -50,6 +49,10 @@ public class SecurityConfig {
                                 "/api/profiles/**",
                                 "/api/job-descriptions/**",
                                 "/api/generation/**",
+                                "/api/cover-letters/**",
+                                "/api/ats/**",
+                                "/api/ai/**",
+                                "/api/auth/**",
                                 "/actuator/health",
                                 "/v3/api-docs/**",
                                 "/swagger-ui.html",
@@ -69,15 +72,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public UserDetailsService userDetailsService() {
-        if (!appProperties.getSecurity().isEnabled()) {
-            return new InMemoryUserDetailsManager();
-        }
-        PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        UserDetails user = User.withUsername(appProperties.getSecurity().getUsername())
-                .password(encoder.encode(appProperties.getSecurity().getPassword()))
-                .roles(appProperties.getSecurity().getRoles().toArray(new String[0]))
-                .build();
-        return new InMemoryUserDetailsManager(user);
+    public PasswordEncoder passwordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 }

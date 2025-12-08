@@ -7,6 +7,7 @@ public class JwtConfig {
     private String secret = "change-me";
     private long expirationSeconds = 3600;
     private boolean enabled = false;
+    private String issuer = "resume-backend";
 
     public String getSecret() {
         return secret;
@@ -30,5 +31,13 @@ public class JwtConfig {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public String getIssuer() {
+        return issuer;
+    }
+
+    public void setIssuer(String issuer) {
+        this.issuer = issuer;
     }
 }

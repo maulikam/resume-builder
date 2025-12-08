@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.resumebuilder.backend.domain.UserProfile;
 import com.resumebuilder.backend.mapper.UserProfileMapper;
@@ -65,11 +67,11 @@ public class DefaultProfileService implements ProfileService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<ProfileResponse> listProfiles() {
-        return userProfileRepository.findAll()
-                .stream()
-                .map(userProfileMapper::toResponse)
-                .toList();
+    public Page<ProfileResponse> listProfiles(String search, Pageable pageable) {
+        var page = (search == null || search.isBlank())
+                ? userProfileRepository.findAll(pageable)
+                : userProfileRepository.findByFullNameContainingIgnoreCase(search, pageable);
+        return page.map(userProfileMapper::toResponse);
     }
 
     @Override

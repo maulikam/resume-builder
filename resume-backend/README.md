@@ -12,9 +12,11 @@ Spring Boot 3.5 backend for AI-assisted LaTeX resume/cover-letter generation.
 - Profiles CRUD: `GET/POST/PUT/DELETE /api/profiles`
 - Job descriptions: `GET/POST /api/job-descriptions`
 - Generation: `POST /api/generation/resume` (LaTeX pipeline), `GET /api/generation/resume/{id}/download` (returns generated PDF).
+- Cover letter: `POST /api/cover-letters` (generate) and `GET /api/cover-letters/{id}/download`
 
 ## Config
 - `application-dev.yml`: H2 + seed default LaTeX template; OpenAI key via `SPRING_AI_OPENAI_API_KEY`; security disabled for dev.
 - `application-prod.yml`: Postgres placeholders; set datasource + OpenAI env vars; security enabled with `APP_SECURITY_USERNAME`/`APP_SECURITY_PASSWORD`.
 - `app.latex.output-dir`: where generated PDFs are stored.
 - `app.ai.keyword-extraction`: `basic` (default) or `ai` (stubbed hook).
+- `app.security.jwt.*`: enable JWT auth with secret/expiration; bearer token fallback also supported.

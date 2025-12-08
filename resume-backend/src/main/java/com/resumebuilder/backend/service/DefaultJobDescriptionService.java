@@ -2,6 +2,9 @@ package com.resumebuilder.backend.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,11 +48,11 @@ public class DefaultJobDescriptionService implements JobDescriptionService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<JobDescriptionResponse> list() {
-        return jobDescriptionRepository.findAll()
-                .stream()
-                .map(jobDescriptionMapper::toResponse)
-                .toList();
+    public Page<JobDescriptionResponse> list(String search, Pageable pageable) {
+        var page = (search == null || search.isBlank())
+                ? jobDescriptionRepository.findAll(pageable)
+                : jobDescriptionRepository.findByTitleContainingIgnoreCaseOrCompanyContainingIgnoreCase(search, search, pageable);
+        return page.map(jobDescriptionMapper::toResponse);
     }
 
     private JobDescription find(Long id) {

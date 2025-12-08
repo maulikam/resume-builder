@@ -133,7 +133,7 @@ public class DefaultResumeGenerationService implements ResumeGenerationService {
                 .reduce("", (a, b) -> a + "\n" + b));
         placeholders.put("education", profile.getEducation().stream()
                 .map(ed -> "\\item \\textbf{" + nullSafe(ed.getDegree()) + "} in " + nullSafe(ed.getFieldOfStudy())
-                        + " at " + nullSafe(ed.getSchool()) + " (" + nullSafe(ed.getStartDate()) + " - " + nullSafe(ed.getEndDate()) + ")")
+                        + " at " + nullSafe(ed.getSchool()) + " (" + formatDate(ed.getStartDate()) + " - " + formatDate(ed.getEndDate()) + ")")
                 .reduce("", (a, b) -> a + "\n" + b));
         return placeholders;
     }
@@ -141,7 +141,7 @@ public class DefaultResumeGenerationService implements ResumeGenerationService {
     private String experienceBlock(com.resumebuilder.backend.domain.Experience exp) {
         String dates = "";
         if (exp.getStartDate() != null || exp.getEndDate() != null) {
-            dates = "(" + nullSafe(exp.getStartDate()) + " - " + nullSafe(exp.getEndDate()) + ")";
+            dates = "(" + formatDate(exp.getStartDate()) + " - " + formatDate(exp.getEndDate()) + ")";
         }
         String line = "\\item \\textbf{" + nullSafe(exp.getTitle()) + "} at " + nullSafe(exp.getCompany()) + " "
                 + nullSafe(exp.getLocation()) + " " + dates;
@@ -164,5 +164,9 @@ public class DefaultResumeGenerationService implements ResumeGenerationService {
 
     private String sanitizeLatex(String text) {
         return text.replaceAll("([#%&_{}$])", "\\\\$1");
+    }
+
+    private String formatDate(java.time.LocalDate date) {
+        return date == null ? "" : date.toString();
     }
 }

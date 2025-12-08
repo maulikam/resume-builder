@@ -29,8 +29,9 @@ app:
     username: ${APP_SECURITY_USERNAME:resume}
     password: ${APP_SECURITY_PASSWORD:change-me}
     roles: [USER]
-    token: ${APP_SECURITY_TOKEN:}
+    token:
     jwt:
       enabled: true
       secret: ${APP_SECURITY_JWT_SECRET:change-me}
       expiration-seconds: ${APP_SECURITY_JWT_EXPIRATION:3600}
+      issuer: ${APP_SECURITY_JWT_ISSUER:resume-backend}

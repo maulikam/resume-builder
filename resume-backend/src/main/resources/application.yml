@@ -20,6 +20,7 @@ app:
       enabled: false
       secret: ${APP_SECURITY_JWT_SECRET:change-me}
       expiration-seconds: 3600
+      issuer: resume-backend
 
 springdoc:
   swagger-ui:
